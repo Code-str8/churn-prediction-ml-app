@@ -2,3 +2,6 @@ streamlit
 joblib
 pandas
 pillow
+scikit-learn
+pyodbc == 5.1.0
+python-dotenv == 1.0.1
