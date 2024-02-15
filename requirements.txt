@@ -1,0 +1,9 @@
+streamlit
+joblib
+pandas
+pillow
+scikit-learn
+requests
+ploty
+pyodbc == 5.1.0
+python-dotenv == 1.0.1
