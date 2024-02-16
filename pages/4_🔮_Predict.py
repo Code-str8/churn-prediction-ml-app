@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-import joblib  # Assuming you've saved your model using joblib
+import joblib  
 import os
 from  PIL import Image
 
@@ -20,7 +20,7 @@ st.write(
 chun_img = Image.open(
     os.path.join (
         os.getcwd(),
-        "assets/chun customer image 2.png"
+        "assets/images/chun customer image 2.png"
         )
     )
 
