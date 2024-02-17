@@ -164,7 +164,7 @@ else:
     st.write ("*Ready to start predicting churn?*:eyes:")
 
     # display GIF
-    gif_path = 'assets/images/hell-yeah-hell-to-the-yeah meme.gif'
+    gif_path = 'assets/images/baby-scream meme.gif'
     st.image(
         gif_path, 
         caption='Below Identify & Retain Happy Customers'

@@ -1,6 +1,8 @@
 streamlit
 joblib
 pandas
+matplotlib
+seaborn
 pillow
 scikit-learn
 requests
