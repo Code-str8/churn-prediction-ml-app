@@ -28,6 +28,6 @@ chun_img = Image.open(
 st.image(
     chun_img,
     use_column_width=True,
-    caption= " Customers leaving can sting your business. Predict & prevent churn!"
+    caption= " Customers leaving can sting your business. Predict & prevent churn"
     )
 
