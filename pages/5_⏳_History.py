@@ -104,10 +104,4 @@ if selected_x_col != selected_y_col:
 # Assuming `per_page` is 3
 st.pagination(history_df, per_page=3, key="pagination")
 
-#theme
-theme_choice = st.radio("Theme", ["Light", "Dark"], key="theme_choice")
-if theme_choice == "Dark":
-    st.theme(use_container_width=True)  # For dark theme responsiveness
-else:
-    st.theme(use_container_width=False)
-
+# Download CSV button
