@@ -1,6 +1,9 @@
 import streamlit as st
 import pandas as pd 
-
+import pyodbc
+from dotenv import dotenv_values
+import warnings
+warnings.filterwarnings("ignore")
 
 
 st.set_page_config(
@@ -13,17 +16,36 @@ st.sidebar.header("Select Language:")
 language = st.sidebar.selectbox("", ["English", "Español"])
 
 if language == "Español":
+    environment_variables = dotenv_values('.env')
+
+    base_de_datos = environment_variables.get("database_name")
+    servidor = environment_variables.get("server_name")
+    usuario = environment_variables.get("Login")
+    contraseña = environment_variables.get("password")
+
+
+    def LP2_Telco_churn():
+       cadena_conexion = f"DRIVER={{SQL Server}};SERVER={servidor};DATABASE={base_de_datos};UID={usuario};PWD={contraseña}"
+       conexion = pyodbc.connect(cadena_conexion)
+       # consulta
+       consulta = 'SELECT * FROM dbo.LP2_Telco_churn_first_3000'
+       datos = pd.read_sql(consulta, conexion)
+       conexion.close()
+
+       return datos
+
+    datos = LP2_Telco_churn()
+
     st.title(f"**Explora tus Datos de Cliente⭐**")
     st.write(
         """
         Obtén valiosos conocimientos sobre tu base de clientes y comprende los factores que afectan la rotación con esta página de datos interactiva.
         """
     )
-
-    # Upload a excel
-    data = pd.read_excel("Dataset/Lp2_df_coc.xlsx")
-    st.dataframe(data)
-
+  
+   
+    st.dataframe(datos) 
+    
     numeric_features = ['tenure', 'MonthlyCharges', 'TotalCharges', 'SeniorCitizen']
     categorical_features = ['gender', 'Partner', 'Dependents', 'PhoneService', 'MultipleLines', 'InternetService', 'OnlineSecurity', 'OnlineBackup', 'DeviceProtection', 'TechSupport', 'StreamingTV', 'StreamingMovies', 'Contract', 'PaperlessBilling', 'PaymentMethod']
 
@@ -73,9 +95,9 @@ if language == "Español":
         "PaymentMethod": "💳 Método de pago del cliente (Cheque electrónico, cheque enviado por correo, Transferencia bancaria (automática), Tarjeta de crédito (automática))"
     }
 
-    feature_explanation = st.selectbox("", data.columns)
+    feature_explanation = st.selectbox("", datos.columns)
     st.write(f"**{feature_explanation}:** {column_descriptions.get(feature_explanation, 'No disponible')}")
-    st.write(f"**{feature_explanation}:** {data[feature_explanation].describe()}")
+    st.write(f"**{feature_explanation}:** {datos[feature_explanation].describe()}")
 
     st.markdown(
         """
@@ -92,43 +114,63 @@ if language == "Español":
     )
 else:
     # Translate content to English
-    st.title(f"**Explore Customer Data⭐**")
-    st.write(
+    environment_variables = dotenv_values('.env')
+ 
+    database = environment_variables.get("database_name")
+    server = environment_variables.get("server_name")
+    username = environment_variables.get("Login")
+    password = environment_variables.get("password")
+ 
+
+def LP2_Telco_churn():
+    connection_string = f"DRIVER={{SQL Server}};SERVER={server};DATABASE={database};UID={username};PWD={password}"
+    connection = pyodbc.connect(connection_string)
+    #query
+    query = 'SELECT * FROM dbo.LP2_Telco_churn_first_3000'
+    data = pd.read_sql(query, connection)
+    connection.close()
+
+    return data
+
+data = LP2_Telco_churn()
+
+
+st.title(f"**Explore Customer Data⭐**")
+st.write(
         """
         Gain valuable insights into customer base and understand factors affecting churn with this interactive data page.
         """
     )
 
-    # Upload a excel
-    data = pd.read_excel("Dataset/Lp2_df_coc.xlsx")
-    st.dataframe(data)
+    
+st.dataframe(data)
 
-    numeric_features = ['tenure', 'MonthlyCharges', 'TotalCharges', 'SeniorCitizen']
-    categorical_features = ['gender', 'Partner', 'Dependents', 'PhoneService', 'MultipleLines', 'InternetService', 'OnlineSecurity', 'OnlineBackup', 'DeviceProtection', 'TechSupport', 'StreamingTV', 'StreamingMovies', 'Contract', 'PaperlessBilling', 'PaymentMethod']
+numeric_features = ['tenure', 'MonthlyCharges', 'TotalCharges', 'SeniorCitizen']
+categorical_features = ['gender', 'Partner', 'Dependents', 'PhoneService', 'MultipleLines', 'InternetService', 'OnlineSecurity', 'OnlineBackup', 'DeviceProtection', 'TechSupport', 'StreamingTV', 'StreamingMovies', 'Contract', 'PaperlessBilling', 'PaymentMethod']
 
-    selected_feature_type = st.radio("Select Feature Type:", ["Numerical", "Categorical"])
+selected_feature_type = st.radio("Select Feature Type:", ["Numerical", "Categorical"])
 
-    if selected_feature_type == "Numerical":
+if selected_feature_type == "Numerical":
         selected_feature = st.selectbox("Select a Numeric Feature", numeric_features)
         st.write(
             f"**Exploring Numerical Feature: {selected_feature}**"
         )
-    elif selected_feature_type == "Categorical":
+elif selected_feature_type == "Categorical":
         selected_feature = st.selectbox("Select a Categorical Feature", categorical_features)
         st.write(
             f"**Exploring Categorical Feature: {selected_feature}**"
         )
-    else:
+else:
         st.error("Invalid feature type.")
 
-    # Feature explanations
-    st.header("Feature Explanations")
-    st.write(
+# Feature explanations
+st.header("Feature Explanations")
+st.write(
         """
         Click on a feature name to view its description and potential impact on churn:
         """
     )
-    column_descriptions = {
+column_descriptions = {
         "customerID": "🆔 Unique identifier for each customer.",
         "tenure": "🔁 Number of months the customer has been with the company.",
         "MonthlyCharges": "💲 The amount charged to the customer's account each month.",
@@ -152,11 +194,11 @@ else:
         "PaymentMethod": "💳 The customer payment method (Electronic check, mailed check, Bank transfer(automatic), Credit card(automatic))"
     }
 
-    feature_explanation = st.selectbox("", data.columns)
-    st.write(f"**{feature_explanation}:** {column_descriptions.get(feature_explanation, 'No description available')}")
-    st.write(f"**{feature_explanation}:** {data[feature_explanation].describe()}")
+feature_explanation = st.selectbox("", data.columns)
+st.write(f"**{feature_explanation}:** {column_descriptions.get(feature_explanation, 'No description available')}")
+st.write(f"**{feature_explanation}:** {data[feature_explanation].describe()}")
 
-    st.markdown(
+st.markdown(
         """
         <div style="text-align: center;">
         <a href="/Dashboard" class="btn btn-primary">See You In The Next Page!</a>
@@ -164,8 +206,8 @@ else:
         """,
         unsafe_allow_html=True
     )
-    # display GIF
-    gif_path = 'assets/images/pepe meme.gif'
-    st.image(
-        gif_path
-    )
+# display GIF
+gif_path = 'assets/images/pepe meme.gif'
+st.image(
+    gif_path
+)

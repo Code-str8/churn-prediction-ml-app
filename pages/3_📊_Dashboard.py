@@ -32,7 +32,7 @@ def create_eda_dashboard(data):
     st.subheader("Distribution of Features")
     fig, axes = plt.subplots(figsize=(12, 8))
     data.hist(ax=axes, grid=False, color="skyblue")
-    plt.tight_layout()  
+    plt.tight_layout()
     st.pyplot(fig)
     st.markdown("""
     Insight📢: The visualization reveals the distributions of continuous numerical columns are notably uneven, predominantly exhibiting positive skewness.

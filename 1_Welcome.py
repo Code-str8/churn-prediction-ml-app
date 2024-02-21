@@ -99,28 +99,22 @@ else:
 
     st.write(
         """
-        This app predicts the likelihood of a customer churning. It uses a machine learning model trained on a dataset of customer features. The model predicts whether a customer will churn or not based on the input features.
+         Predict the likelihood of a customer leaving your business. This app uses machine learning to analyze data and identify customers at risk of churn.
 
         **Note:** This app is for demonstration purposes only. It does not provide real-time predictions.
 
         ### **Why is customer churn prediction important?**
 
-        [Customer churn](https://www.questionpro.com/blog/customer-churn/) also known as customer attrition, is the loss of customers over a given period of time. It is a common problem faced by businesses and can have significant consequences, including a decline in revenue and a loss of market share.
+        [Customer churn](https://www.questionpro.com/blog/customer-churn/) also known as customer attrition, can significantly impact your revenue and market share. By predicting churn, you can take proactive steps to retain customers and reduce its negative impact.
 
-        By using machine learning to predict customer churn, businesses can take proactive steps to retain customers and reduce the negative impact of churn.
 
-        #### **How does the app work?**
-
-        The app allows you to input a variety of customer features, such as Tenure,Contract type, and Total charges. Based on these features, the machine learning model will predict whether a customer is at risk of churning.
-
+        
         **Key features:**
 
         * User-friendly interface
         * High accuracy machine learning models
 
-        **Model performance:**
-
-        Our machine learning models have been trained on a large dataset of customer features and has achieved an accuracy of 80%.
+        
         """
     )
 
@@ -143,10 +137,10 @@ else:
     st.markdown(
         """
         #### **Benefits of Using This App**
-        - **Early warnings:** Gain insights into which customers are at risk of leaving, allowing you to intervene before it's too late.
-        - **Data-driven decisions:** Base your retention efforts on objective predictions, not just intuition.
-        - **Personalized outreach:** Tailor your retention strategies to the specific needs and concerns of at-risk customers.
-        - **Improved ROI:** Invest in retaining existing customers rather than acquiring new ones, often at a lower cost.
+        -  Gain early insights and make data-driven decisions to identify and retain at-risk customers.
+        -  Personalized outreach: Tailor your retention strategies to specific needs and concerns.
+        -  Improved ROI: Invest in retaining existing customers rather than acquiring new ones.
+
         """
     )
 
@@ -167,7 +161,7 @@ else:
     gif_path = 'assets/images/baby-scream meme.gif'
     st.image(
         gif_path, 
-        caption='Below Identify & Retain Happy Customers'
+        caption='Retain Customers'
     )
 
     # Instructions
@@ -183,5 +177,7 @@ else:
 st.write(
     """
 **Source Code:** [GitHub Repository](https://github.com/Code-str8/Churn-Prediction-ML-app)
+
+**Gmail:** [ndunda.alex@gmail.com]
 """
 )
