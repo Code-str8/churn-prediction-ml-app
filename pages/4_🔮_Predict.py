@@ -50,9 +50,10 @@ def load_logistic():
     Logistic = joblib.load('models/logistic_pipeline.joblib')
     return Logistic
 
-# Create a display form function
+# Create a form for user input
 def user_input_form():
     with st.form(key='user_input_form'):
+        st.header('User Input')
         customerID = st.text_input(label='CustomerID')
         tenure = st.number_input(label='tenure')
         MonthlyCharges = st.number_input(label='MonthlyCharges')
@@ -74,14 +75,15 @@ def user_input_form():
         PaperlessBilling = st.selectbox(label='PaperlessBilling', options=['Yes', 'No'])
         PaymentMethod = st.selectbox(label='MultipleLines', options=['Electronic check', 'mailed check', 'Bank transfer(automatic)', 'Credit card(automatic)'])
         submit_button = st.form_submit_button(label='Submit')
-    return 'gender', 'Partner','customerID', 'Dependents', 'tenure','PhoneService', 'MultipleLines', 'InternetService', 'OnlineSecurity','OnlineBackup', 'DeviceProtection', 'TechSupport', 'StreamingTV','StreamingMovies', 'Contract', 'PaperlessBilling', 'PaymentMethod', submit_button
+    return customerID, tenure, MonthlyCharges, TotalCharges, SeniorCitizen, gender, Partner, Dependents, PhoneService, MultipleLines, InternetService, OnlineSecurity, OnlineBackup, DeviceProtection, TechSupport, StreamingTV, StreamingMovies, contract, PaperlessBilling, PaymentMethod, submit_button
 
+# Create a function to transform TotalCharges using log1p
 def log1p_transform(X):
     X['TotalCharges'] = np.log1p(X['TotalCharges'])
     return X
 
 # Create a select_model function
-def select_model(gender,Partner,customerID,Dependents,tenure,PhoneService,MultipleLines,InternetService,OnlineSecurity,OnlineBackup,DeviceProtection,TechSupport,StreamingTV,StreamingMovies, Contract,PaperlessBilling, PaymentMethod):
+def select_model(gender, Partner, customerID, Dependents, tenure, PhoneService, MultipleLines, InternetService, OnlineSecurity, OnlineBackup, DeviceProtection, TechSupport, StreamingTV, StreamingMovies, contract, PaperlessBilling, PaymentMethod):
     if st.session_state.selected_model == 'Catboost':
         pipeline = load_catboost()
         encoder = LabelEncoder()
@@ -96,29 +98,52 @@ def select_model(gender,Partner,customerID,Dependents,tenure,PhoneService,Multip
     return pipeline, encoder
 
 # Create a make_prediction function
-def make_prediction(gender,Partner,customerID,Dependents,tenure,PhoneService,MultipleLines,InternetService,OnlineSecurity,OnlineBackup,DeviceProtection,TechSupport,StreamingTV,StreamingMovies, Contract,PaperlessBilling, PaymentMethod, pipeline, encoder):
+def make_prediction(gender, Partner, MonthlyCharges, Dependents, SeniorCitizen,tenure, PhoneService, MultipleLines, InternetService, OnlineSecurity, OnlineBackup, DeviceProtection, TechSupport, StreamingTV, StreamingMovies, contract, PaperlessBilling, PaymentMethod, pipeline, encoder):
     if pipeline is not None:
-        data = [[gender,Partner,customerID,Dependents,tenure,PhoneService,MultipleLines,InternetService,OnlineSecurity,OnlineBackup,DeviceProtection,TechSupport,StreamingTV,StreamingMovies, Contract,PaperlessBilling, PaymentMethod]]
+        data = {
+            'gender': [gender],
+            'Partner': [Partner],
+            'SeniorCitizen': [SeniorCitizen],
+            'MonthlyCharges': [MonthlyCharges],
+            'Dependents': [Dependents],
+            'tenure': [tenure],
+            'PhoneService': [PhoneService],
+            'MultipleLines': [MultipleLines],
+            'InternetService': [InternetService],
+            'OnlineSecurity': [OnlineSecurity],
+            'OnlineBackup': [OnlineBackup],
+            'DeviceProtection': [DeviceProtection],
+            'TechSupport': [TechSupport],
+            'StreamingTV': [StreamingTV],
+            'StreamingMovies': [StreamingMovies],
+            'Contract': [contract],
+            'PaperlessBilling': [PaperlessBilling],
+            'PaymentMethod': [PaymentMethod]
+        }
         df = pd.DataFrame(data)
+        # Add TotalCharges to DataFrame if it's not included in the inputs from the user
+        if 'TotalCharges' not in df.columns:
+            df['TotalCharges'] = np.nan  # Replace np.nan with the actual value entered by the user
+        df = log1p_transform(df)  # Transform TotalCharges
         prediction = pipeline.predict(df)[0]
         probability = pipeline.predict_proba(df)[0][prediction]
         prediction = encoder.inverse_transform([prediction])[0]
         st.session_state.final_prediction = prediction
         st.session_state.final_probability = probability
 
-# Display the form and make prediction
+# Main function
 def main():
-    gender,Partner,customerID,Dependents,tenure,PhoneService,MultipleLines,InternetService,OnlineSecurity,OnlineBackup,DeviceProtection,TechSupport,StreamingTV,StreamingMovies, Contract,PaperlessBilling, PaymentMethod, submit_button = user_input_form()
+    tenure, MonthlyCharges, TotalCharges, SeniorCitizen, gender, Partner, Dependents, PhoneService, MultipleLines, InternetService, OnlineSecurity, OnlineBackup, DeviceProtection, TechSupport, StreamingTV, StreamingMovies, contract, PaperlessBilling, PaymentMethod, submit_button = user_input_form()
     if submit_button:
-       st.session_state.selected_model = st.selectbox(label='Select Model', options=['Catboost', 'Logistic'])
-       pipeline, encoder = select_model(gender,Partner,customerID,Dependents,tenure,PhoneService,MultipleLines,InternetService,OnlineSecurity,OnlineBackup,DeviceProtection,TechSupport,StreamingTV,StreamingMovies, Contract,PaperlessBilling, PaymentMethod)
-       make_prediction(gender,Partner,customerID,Dependents,tenure,PhoneService,MultipleLines,InternetService,OnlineSecurity,OnlineBackup,DeviceProtection,TechSupport,StreamingTV,StreamingMovies, Contract,PaperlessBilling, PaymentMethod, pipeline, encoder)
+        st.session_state.selected_model = st.selectbox(label='Select Model', options=['Catboost', 'Logistic'])
+        pipeline, encoder = select_model(gender, Partner, Dependents, tenure, PhoneService, MultipleLines, InternetService, OnlineSecurity, OnlineBackup, DeviceProtection, TechSupport, StreamingTV, StreamingMovies, contract, PaperlessBilling, PaymentMethod)
+        make_prediction(gender, Partner, Dependents, tenure, MonthlyCharges, TotalCharges, SeniorCitizen, PhoneService, MultipleLines, InternetService, OnlineSecurity, OnlineBackup, DeviceProtection, TechSupport, StreamingTV, StreamingMovies, contract, PaperlessBilling, PaymentMethod, pipeline, encoder)
 
-# Show prediction and probability
-if st.session_state.final_prediction is not None:
-    st.write(f'Prediction: {st.session_state.final_prediction}')
-    st.write(f'Probability: {st.session_state.final_probability}')
+
+    # Show prediction and probability
+    if st.session_state.final_prediction is not None:
+        st.write(f'Prediction: {st.session_state.final_prediction}')
+        st.write(f'Probability: {st.session_state.final_probability}')
 
 if __name__ == "__main__":
     main()
-
