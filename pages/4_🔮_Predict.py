@@ -6,6 +6,7 @@ import os
 from sklearn.preprocessing import LabelEncoder
 from catboost import CatBoostClassifier
 from imblearn.over_sampling import RandomOverSampler
+from sklearn.linear_model import LogisticRegression
 from  PIL import Image
 
 st.set_page_config(
@@ -35,7 +36,7 @@ st.image(
     caption= " Customers leaving can sting your business. Predict & prevent churn!"
     )
 
-# Initialize session state
+#  session state
 if 'final_prediction' not in st.session_state:
     st.session_state.final_prediction = None
 
@@ -54,7 +55,6 @@ def load_logistic():
 def user_input_form():
     with st.form(key='user_input_form'):
         st.header('User Input')
-        customerID = st.text_input(label='CustomerID')
         tenure = st.number_input(label='tenure')
         MonthlyCharges = st.number_input(label='MonthlyCharges')
         TotalCharges = st.number_input(label='TotalCharges')
@@ -73,63 +73,41 @@ def user_input_form():
         StreamingMovies = st.selectbox(label='StreamingMovies', options=['Yes', 'No', 'No Internet'])
         contract = st.selectbox(label='contract', options=['Month-to-Month', 'One year', 'Two year'])
         PaperlessBilling = st.selectbox(label='PaperlessBilling', options=['Yes', 'No'])
-        PaymentMethod = st.selectbox(label='MultipleLines', options=['Electronic check', 'mailed check', 'Bank transfer(automatic)', 'Credit card(automatic)'])
+        PaymentMethod = st.selectbox(label='PaymentMethod', options=['Electronic check', 'mailed check', 'Bank transfer(automatic)', 'Credit card(automatic)'])
         submit_button = st.form_submit_button(label='Submit')
-    return customerID, tenure, MonthlyCharges, TotalCharges, SeniorCitizen, gender, Partner, Dependents, PhoneService, MultipleLines, InternetService, OnlineSecurity, OnlineBackup, DeviceProtection, TechSupport, StreamingTV, StreamingMovies, contract, PaperlessBilling, PaymentMethod, submit_button
+    return tenure, MonthlyCharges, TotalCharges, SeniorCitizen, gender, Partner, Dependents, PhoneService, MultipleLines, InternetService, OnlineSecurity, OnlineBackup, DeviceProtection, TechSupport, StreamingTV, StreamingMovies, contract, PaperlessBilling, PaymentMethod, submit_button
 
-# Create a function to transform TotalCharges using log1p
-def log1p_transform(X):
-    X['TotalCharges'] = np.log1p(X['TotalCharges'])
-    return X
 
-# Create a select_model function
-def select_model(gender, Partner, customerID, Dependents, tenure, PhoneService, MultipleLines, InternetService, OnlineSecurity, OnlineBackup, DeviceProtection, TechSupport, StreamingTV, StreamingMovies, contract, PaperlessBilling, PaymentMethod):
-    if st.session_state.selected_model == 'Catboost':
+#  function to transform TotalCharges using log1p
+def log1p_transform(df):
+    df['TotalCharges'] = np.log1p(df['TotalCharges'])
+    return df
+
+# select_model function
+def select_model(gender, Partner, Dependents, tenure, PhoneService, MultipleLines, InternetService, OnlineSecurity, OnlineBackup, DeviceProtection, TechSupport, StreamingTV, StreamingMovies, contract, PaperlessBilling, PaymentMethod):
+    selected_model = st.session_state.get('selected_model', 'Catboost')  # Load initial model selection
+    pipeline, encoder = None, None
+    if selected_model == 'Catboost':
         pipeline = load_catboost()
         encoder = LabelEncoder()
         encoder.fit(pipeline.classes_)
-    elif st.session_state.selected_model == 'Logistic':
+    elif selected_model == 'Logistic':
         pipeline = load_logistic()
         encoder = LabelEncoder()
         encoder.fit(pipeline.classes_)
-    else:
-        pipeline = None
-        encoder = None
     return pipeline, encoder
 
-# Create a make_prediction function
-def make_prediction(gender, Partner, MonthlyCharges, Dependents, SeniorCitizen,tenure, PhoneService, MultipleLines, InternetService, OnlineSecurity, OnlineBackup, DeviceProtection, TechSupport, StreamingTV, StreamingMovies, contract, PaperlessBilling, PaymentMethod, pipeline, encoder):
+data = [["gender", "Partner", "MonthlyCharges", "Dependents", "SeniorCitizen","tenure", "PhoneService", "MultipleLines", "InternetService", "OnlineSecurity", "OnlineBackup", "DeviceProtection", "TechSupport", "StreamingTV", "StreamingMovies", "contract", "PaperlessBilling", "PaymentMethod"]]
+#  make_prediction function
+def make_prediction(pipeline, encoder, data):
     if pipeline is not None:
-        data = {
-            'gender': [gender],
-            'Partner': [Partner],
-            'SeniorCitizen': [SeniorCitizen],
-            'MonthlyCharges': [MonthlyCharges],
-            'Dependents': [Dependents],
-            'tenure': [tenure],
-            'PhoneService': [PhoneService],
-            'MultipleLines': [MultipleLines],
-            'InternetService': [InternetService],
-            'OnlineSecurity': [OnlineSecurity],
-            'OnlineBackup': [OnlineBackup],
-            'DeviceProtection': [DeviceProtection],
-            'TechSupport': [TechSupport],
-            'StreamingTV': [StreamingTV],
-            'StreamingMovies': [StreamingMovies],
-            'Contract': [contract],
-            'PaperlessBilling': [PaperlessBilling],
-            'PaymentMethod': [PaymentMethod]
-        }
         df = pd.DataFrame(data)
-        # Add TotalCharges to DataFrame if it's not included in the inputs from the user
-        if 'TotalCharges' not in df.columns:
-            df['TotalCharges'] = np.nan  # Replace np.nan with the actual value entered by the user
-        df = log1p_transform(df)  # Transform TotalCharges
+        df = log1p_transform(df)  
         prediction = pipeline.predict(df)[0]
-        probability = pipeline.predict_proba(df)[0][prediction]
-        prediction = encoder.inverse_transform([prediction])[0]
-        st.session_state.final_prediction = prediction
-        st.session_state.final_probability = probability
+        churn_probability = pipeline.predict_proba(df)[0][1]  
+        prediction_label = "Churn" if prediction == 1 else "Not Churn"
+        st.session_state.final_prediction = prediction_label
+        st.session_state.final_probability = 100 * churn_probability  
 
 # Main function
 def main():
@@ -137,13 +115,36 @@ def main():
     if submit_button:
         st.session_state.selected_model = st.selectbox(label='Select Model', options=['Catboost', 'Logistic'])
         pipeline, encoder = select_model(gender, Partner, Dependents, tenure, PhoneService, MultipleLines, InternetService, OnlineSecurity, OnlineBackup, DeviceProtection, TechSupport, StreamingTV, StreamingMovies, contract, PaperlessBilling, PaymentMethod)
-        make_prediction(gender, Partner, Dependents, tenure, MonthlyCharges, TotalCharges, SeniorCitizen, PhoneService, MultipleLines, InternetService, OnlineSecurity, OnlineBackup, DeviceProtection, TechSupport, StreamingTV, StreamingMovies, contract, PaperlessBilling, PaymentMethod, pipeline, encoder)
 
+        # Single-row DataFrame directly from user input values 
+        df = pd.DataFrame({
+            'gender': gender,
+            'Partner': Partner,
+            'Dependents': Dependents,
+            'SeniorCitizen': SeniorCitizen,
+            'MonthlyCharges': MonthlyCharges,
+            'TotalCharges': TotalCharges,
+            'tenure': tenure,
+            'PhoneService': PhoneService,
+            'MultipleLines': MultipleLines,
+            'InternetService': InternetService,
+            'OnlineSecurity': OnlineSecurity,
+            'OnlineBackup': OnlineBackup,
+            'DeviceProtection': DeviceProtection,
+            'TechSupport': TechSupport,
+            'StreamingTV': StreamingTV,
+            'StreamingMovies': StreamingMovies,
+            'Contract': contract,
+            'PaperlessBilling': PaperlessBilling,
+            'PaymentMethod': PaymentMethod
+        }, index=[0]) 
 
-    # Show prediction and probability
+        make_prediction(pipeline, encoder, df)
+    # prediction and probability
     if st.session_state.final_prediction is not None:
-        st.write(f'Prediction: {st.session_state.final_prediction}')
-        st.write(f'Probability: {st.session_state.final_probability}')
+        st.write(f'Prediction of the customer churn: {st.session_state.final_prediction}💫')
+        st.write(f'Probability that the customer will churn: {st.session_state.final_probability:.1f}% ✨')
+
 
 if __name__ == "__main__":
     main()
