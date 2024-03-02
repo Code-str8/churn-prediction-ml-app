@@ -54,14 +54,13 @@ def load_logistic():
 # Create a form for user input
 def user_input_form():
     with st.form(key='user_input_form'):
-        st.header('User Input')
+        st.header('**User Input**⚪')
         tenure = st.number_input(label='tenure')
-        MonthlyCharges = st.number_input(label='MonthlyCharges')
-        TotalCharges = st.number_input(label='TotalCharges')
         SeniorCitizen = st.number_input(label='SeniorCitizen')
         gender = st.selectbox(label='Gender', options=['Male', 'Female'])
         Partner = st.selectbox(label='Partner', options=['Yes', 'No'])
         Dependents = st.selectbox(label='Dependents', options=['Yes', 'No'])
+        st.header('**Services**🔴')
         PhoneService = st.selectbox(label='PhoneService', options=['Yes', 'No'])
         MultipleLines = st.selectbox(label='MultipleLines', options=['Yes', 'No'])
         InternetService = st.selectbox(label='InternetService', options=['DSL', 'Fiber Optic', 'No'])
@@ -71,10 +70,13 @@ def user_input_form():
         TechSupport = st.selectbox(label='TechSupport', options=['Yes', 'No', 'No Internet'])
         StreamingTV = st.selectbox(label='StreamingTV', options=['Yes', 'No', 'No Internet'])
         StreamingMovies = st.selectbox(label='StreamingMovies', options=['Yes', 'No', 'No Internet'])
+        st.header('**Payment**⚫')
         contract = st.selectbox(label='contract', options=['Month-to-Month', 'One year', 'Two year'])
         PaperlessBilling = st.selectbox(label='PaperlessBilling', options=['Yes', 'No'])
         PaymentMethod = st.selectbox(label='PaymentMethod', options=['Electronic check', 'mailed check', 'Bank transfer(automatic)', 'Credit card(automatic)'])
-        submit_button = st.form_submit_button(label='Submit')
+        MonthlyCharges = st.number_input(label='MonthlyCharges')
+        TotalCharges = st.number_input(label='TotalCharges')
+        submit_button = st.form_submit_button(label='Predict')
     return tenure, MonthlyCharges, TotalCharges, SeniorCitizen, gender, Partner, Dependents, PhoneService, MultipleLines, InternetService, OnlineSecurity, OnlineBackup, DeviceProtection, TechSupport, StreamingTV, StreamingMovies, contract, PaperlessBilling, PaymentMethod, submit_button
 
 
