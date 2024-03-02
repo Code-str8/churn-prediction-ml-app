@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd 
 import pyodbc
-from dotenv import dotenv_values
 import warnings
 warnings.filterwarnings("ignore")
 
@@ -16,13 +15,10 @@ st.sidebar.header("Select Language:")
 language = st.sidebar.selectbox("", ["English", "Español"])
 
 if language == "Español":
-    environment_variables = dotenv_values('.env')
-
-    base_de_datos = environment_variables.get("database_name")
-    servidor = environment_variables.get("server_name")
-    usuario = environment_variables.get("Login")
-    contraseña = environment_variables.get("password")
-
+    base_de_datos = st.secrets["database_name"]
+    servidor = st.secrets["server_name"]
+    usuario = st.secrets["Login"]
+    contraseña = st.secrets["password"]
 
     def LP2_Telco_churn():
        cadena_conexion = f"DRIVER={{SQL Server}};SERVER={servidor};DATABASE={base_de_datos};UID={usuario};PWD={contraseña}"
@@ -114,12 +110,11 @@ if language == "Español":
     )
 else:
     # Translate content to English
-    environment_variables = dotenv_values('.env')
- 
-    database = environment_variables.get("database_name")
-    server = environment_variables.get("server_name")
-    username = environment_variables.get("Login")
-    password = environment_variables.get("password")
+   database = st.secrets["database_name"]
+   server = st.secrets["server_name"]
+   username = st.secrets["Login"]
+   password = st.secrets["password"]
+
  
 
 def LP2_Telco_churn():
