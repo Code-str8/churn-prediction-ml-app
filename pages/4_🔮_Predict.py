@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import joblib  
+import pyodbc
 import os as os
 from sklearn.preprocessing import LabelEncoder
 from catboost import CatBoostClassifier
@@ -98,12 +99,33 @@ def select_model(gender, Partner, Dependents, tenure, PhoneService, MultipleLine
         st.error(f"An error occurred loading the model: {e}")
     return pipeline, encoder
 
-data = [["gender", "Partner", "MonthlyCharges", "Dependents","TotalCharges", "SeniorCitizen","tenure", "PhoneService", "MultipleLines", "InternetService", "OnlineSecurity", "OnlineBackup", "DeviceProtection", "TechSupport", "StreamingTV", "StreamingMovies", "contract", "PaperlessBilling", "PaymentMethod"]]
+#data = [["gender", "Partner", "MonthlyCharges", "Dependents","TotalCharges", "SeniorCitizen","tenure", "PhoneService", "MultipleLines", "InternetService", "OnlineSecurity", "OnlineBackup", "DeviceProtection", "TechSupport", "StreamingTV", "StreamingMovies", "contract", "PaperlessBilling", "PaymentMethod"]]
+ 
+database = st.secrets["database_name"]
+server = st.secrets["server_name"]
+username = st.secrets["Login"]
+password = st.secrets["password"]
+
+ 
+
+def LP2_Telco_churn():
+    connection_string = f"DRIVER={{SQL Server}};SERVER={server};DATABASE={database};UID={username};PWD={password}"
+    connection = pyodbc.connect(connection_string)
+    #query
+    query = 'SELECT * FROM dbo.LP2_Telco_churn_first_3000'
+    data = pd.read_sql(query, connection)
+    connection.close()
+
+    return data
+
+data = LP2_Telco_churn()
+
+
 #  make_prediction function
 def make_prediction(pipeline, data):
     if pipeline is not None:
         df = pd.DataFrame(data)
-        df.to_csv('./Data/History.csv', mode='a', header=False, index=False if os.path.exists('./Data/History.csv') else True)
+        df.to_csv('./Data/History.csv', mode='a', header=True, index=False if os.path.exists('./Data/History.csv') else True)
         if not os.path.exists:
             os.mkdir("./Data")
         df = log1p_transform(df)
