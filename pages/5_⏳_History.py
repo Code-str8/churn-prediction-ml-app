@@ -16,7 +16,7 @@ st.write (
 
 
 def user_predict_history():
-    file_path = "./Data/History.csv"
+    file_path = r"C:\Users\ndund\OneDrive\Documents\PYTHON\Churn-Prediction-ML-app\Data\History.csv"
     history_df = pd.read_csv(file_path)
     return history_df
 
