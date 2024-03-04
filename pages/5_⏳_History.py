@@ -11,7 +11,6 @@ st.set_page_config(
 )
 
 st.title("**HISTORY**")
-search_term = st.text_input("Search history", key="search_term")
 def user_predict_history():
     file_path = "Data/History.csv"
     try:

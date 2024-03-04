@@ -125,7 +125,7 @@ data = LP2_Telco_churn()
 def make_prediction(pipeline, data):
     if pipeline is not None:
         df = pd.DataFrame(data)
-        df.to_csv('./Data/History.csv', mode='a', header=True, index=False if os.path.exists('./Data/History.csv') else True)
+        df.to_csv('./Data/History.csv', mode='a', header=False, index=False if os.path.exists('./Data/History.csv') else True)
         if not os.path.exists:
             os.mkdir("./Data")
         df = log1p_transform(df)

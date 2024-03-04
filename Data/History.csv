@@ -6,3 +6,6 @@ Male,Yes,Yes,1,0.0,0.0,0.0,Yes,Yes,DSL,Yes,Yes,Yes,Yes,Yes,Yes,One year,Yes,Bank
 
 gender,Partner,Dependents,SeniorCitizen,MonthlyCharges,TotalCharges,tenure,PhoneService,MultipleLines,InternetService,OnlineSecurity,OnlineBackup,DeviceProtection,TechSupport,StreamingTV,StreamingMovies,Contract,PaperlessBilling,PaymentMethod
 Male,Yes,Yes,1,0.0,0.0,0.0,Yes,Yes,DSL,Yes,Yes,Yes,Yes,Yes,Yes,Month-to-Month,Yes,mailed check
+gender,Partner,Dependents,SeniorCitizen,MonthlyCharges,TotalCharges,tenure,PhoneService,MultipleLines,InternetService,OnlineSecurity,OnlineBackup,DeviceProtection,TechSupport,StreamingTV,StreamingMovies,Contract,PaperlessBilling,PaymentMethod
+Female,No,Yes,1,0.0,0.0,0.0,Yes,No,Fiber Optic,Yes,Yes,Yes,Yes,Yes,Yes,Month-to-Month,Yes,Electronic check
+Female,No,Yes,2,0.0,0.0,0.0,No,No,Fiber Optic,Yes,Yes,Yes,Yes,Yes,Yes,One year,No,Bank transfer(automatic)
