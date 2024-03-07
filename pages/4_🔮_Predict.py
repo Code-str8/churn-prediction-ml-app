@@ -6,10 +6,7 @@ import os
 from sklearn.preprocessing import LabelEncoder
 from catboost import CatBoostClassifier
 from imblearn.over_sampling import RandomOverSampler
-<<<<<<< HEAD
-=======
 from sklearn.linear_model import LogisticRegression
->>>>>>> 43ab3a11d0405e162232c78031caad66a809a5c1
 from  PIL import Image
 
 st.set_page_config(
