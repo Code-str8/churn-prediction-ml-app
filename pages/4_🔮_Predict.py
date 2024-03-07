@@ -2,7 +2,8 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import joblib  
-import os
+import pyodbc
+import os as os
 from sklearn.preprocessing import LabelEncoder
 from catboost import CatBoostClassifier
 from imblearn.over_sampling import RandomOverSampler
@@ -98,11 +99,35 @@ def select_model(gender, Partner, Dependents, tenure, PhoneService, MultipleLine
         st.error(f"An error occurred loading the model: {e}")
     return pipeline, encoder
 
-data = [["gender", "Partner", "MonthlyCharges", "Dependents", "SeniorCitizen","tenure", "PhoneService", "MultipleLines", "InternetService", "OnlineSecurity", "OnlineBackup", "DeviceProtection", "TechSupport", "StreamingTV", "StreamingMovies", "contract", "PaperlessBilling", "PaymentMethod"]]
+#data = [["gender", "Partner", "MonthlyCharges", "Dependents","TotalCharges", "SeniorCitizen","tenure", "PhoneService", "MultipleLines", "InternetService", "OnlineSecurity", "OnlineBackup", "DeviceProtection", "TechSupport", "StreamingTV", "StreamingMovies", "contract", "PaperlessBilling", "PaymentMethod"]]
+ 
+database = st.secrets["database_name"]
+server = st.secrets["server_name"]
+username = st.secrets["Login"]
+password = st.secrets["password"]
+
+ 
+
+def LP2_Telco_churn():
+    connection_string = f"DRIVER={{SQL Server}};SERVER={server};DATABASE={database};UID={username};PWD={password}"
+    connection = pyodbc.connect(connection_string)
+    #query
+    query = 'SELECT * FROM dbo.LP2_Telco_churn_first_3000'
+    data = pd.read_sql(query, connection)
+    connection.close()
+
+    return data
+
+data = LP2_Telco_churn()
+
+
 #  make_prediction function
 def make_prediction(pipeline, data):
     if pipeline is not None:
         df = pd.DataFrame(data)
+        df.to_csv('./Data/History.csv', mode='a', header=False, index=False if os.path.exists('./Data/History.csv') else True)
+        if not os.path.exists:
+            os.mkdir("./Data")
         df = log1p_transform(df)
         try:  
             prediction = pipeline.predict(df)[0]
@@ -112,6 +137,9 @@ def make_prediction(pipeline, data):
             st.session_state.final_probability = 100 * churn_probability
         except Exception as e:  # handling errors
             st.error(f"An error occurred making the prediction: {e}")
+
+        
+
 
 # Main function
 def main():
@@ -146,8 +174,8 @@ def main():
         make_prediction(pipeline, df)
     # prediction and probability
     if st.session_state.final_prediction is not None:
-        st.write(f'💫 Prediction of the customer churn: {st.session_state.final_prediction}')
-        st.write(f'✨ Probability that the customer will churn: {st.session_state.final_probability:.1f}%')
+        st.write(f'💫 Prediction of the customer to churn: {st.session_state.final_prediction}')
+        st.write(f'✨ Probability that the customer will churn will be: {st.session_state.final_probability:.1f}%')
 
 
 if __name__ == "__main__":
