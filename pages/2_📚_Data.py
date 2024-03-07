@@ -12,7 +12,7 @@ st.set_page_config(
 )
 
 
-    # Translate content to English
+# Translate content to English
 database = st.secrets["database_name"]
 server = st.secrets["server_name"]
 username = st.secrets["Login"]
