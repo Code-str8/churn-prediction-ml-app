@@ -7,94 +7,86 @@ st.set_page_config(
     layout = "centered"
 )
 
-st.sidebar.header("Select Language:")
-language = st.sidebar.selectbox("", ["English", "Español"])
 
-if language == "Español":
-    st.title(f"**Predicción de abandono de clientes** :runner::department_store:")
+    
+import streamlit as st
 
-    st.write(
-        """
-        Esta aplicación predice la probabilidad de abandono de un cliente. Utiliza un modelo de aprendizaje automático entrenado en un conjunto de datos de características de clientes. El modelo predice si un cliente abandonará o no basado en las características de entrada.
+# Define CSS styles
+css = """
+<style>
+    .auth-container {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 40px;
+        background-color: #f2f2f2;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .auth-title {
+        text-align: center;
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+    .auth-input input {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+    .auth-button button {
+        width: 100%;
+        background-color: #4CAF50;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    .auth-button button:hover {
+        background-color: #45a049;
+    }
+</style>
+"""
 
-        **Nota:** Esta aplicación es solo para fines de demostración. No proporciona predicciones en tiempo real.
+# Add CSS to app
+st.markdown(css, unsafe_allow_html=True)
 
-        ### **¿Por qué es importante la predicción de abandono de clientes?**
+def authenticate(username, password):
+    # Simulate authentication (replace with your actual logic)
+    if username == "admin" and password == "Admin01":
+        return True
+    else:
+        return False
 
-        [La pérdida de clientes](https://www.questionpro.com/blog/customer-churn/), también conocida como deserción de clientes, es la pérdida de clientes en un período de tiempo determinado. Es un problema común que enfrentan las empresas y puede tener consecuencias significativas, incluida una disminución en los ingresos y una pérdida de participación en el mercado.
+# Session state for authentication status
+if "authenticated" not in st.session_state:
+    st.session_state["authenticated"] = False
 
-        Al utilizar el aprendizaje automático para predecir el abandono de clientes, las empresas pueden tomar medidas proactivas para retener clientes y reducir el impacto negativo de la deserción.
+if not st.session_state["authenticated"]:
+    with st.container():
+        st.markdown("<div class='auth-title'>Login</div>", unsafe_allow_html=True)
+        username = st.text_input("Username:", key="username")
+        password = st.text_input("Password:", type="password", key="password")
+        st.markdown("<div class='auth-input'></div>", unsafe_allow_html=True)
+        st.markdown("<div class='auth-input'></div>", unsafe_allow_html=True)
+        st.markdown("<div class='auth-button'></div>", unsafe_allow_html=True)
+        login_button = st.button("Login")
+        st.markdown("</div>", unsafe_allow_html=True)
 
-        #### **¿Cómo funciona la aplicación?**
-
-        La aplicación le permite ingresar una variedad de características del cliente, como Antigüedad, Tipo de contrato y Cargos totales. Basándose en estas características, el modelo de aprendizaje automático predecirá si un cliente está en riesgo de abandonar.
-
-        **Características clave:**
-
-        * Interfaz fácil de usar
-        * Modelos de aprendizaje automático de alta precisión
-
-        **Rendimiento del modelo:**
-
-        Nuestros modelos de aprendizaje automático se han entrenado en un gran conjunto de datos de características de clientes y han alcanzado una precisión del 80%.
-        """
-    )
-
-    # Imagen
-    chun_img = Image.open(
-        os.path.join(
-            os.getcwd(),
-            "assets/images/chun customer image.jpg"
-        )
-    )
-
-    # Mostrar imagen
-    st.image(
-        chun_img,
-        use_column_width=True,
-        caption="Las abejas representan experiencias negativas que pueden alejar a los clientes."
-    )
-
-    st.markdown(
-        """
-        #### **Beneficios de utilizar esta aplicación**
-        - **Advertencias tempranas:** Obtenga información sobre qué clientes están en riesgo de irse, lo que le permite intervenir antes de que sea demasiado tarde.
-        - **Decisiones basadas en datos:** Base sus esfuerzos de retención en predicciones objetivas, no solo en intuición.
-        - **Alcance personalizado:** Adapte sus estrategias de retención a las necesidades y preocupaciones específicas de los clientes en riesgo.
-        - **ROI mejorado:** Invierta en retener clientes existentes en lugar de adquirir nuevos, a menudo a un costo menor.
-        """
-    )
-
-    st.markdown(
-        """
-        #### **El impacto del abandono de clientes**
-        💭 Los estudios muestran que perder un cliente puede costar de 5 a 10 veces más que adquirir uno nuevo.
-
-        💭 Aumentar la retención de clientes en solo un 5% puede aumentar los beneficios en un 25-95%.
-        """
-    )
-
-    # Llamado a la acción
-    st.write("## ¡Pruébalo❗")
-    st.write("*¿Listo para comenzar a predecir el abandono?*:eyes:")
-
-    # Mostrar GIF
-    gif_path = 'assets/images/hell-yeah-hell-to-the-yeah meme.gif'
-    st.image(
-        gif_path,
-        caption='A continuación, identifique y retenga a los clientes felices'
-    )
-
-    # Instrucciones
-    st.write(
-        """
-        Diríjase a la [*página de Predicción*](http://localhost:8501/Predict) para ingresar fácilmente la información del cliente y descubrir su riesgo de abandono.
-
-        Para obtener más detalles sobre la funcionalidad y el rendimiento de la aplicación, explore la página **Bienvenida**.
-        """
-    )
+        if login_button:
+            if authenticate(username, password):
+                st.session_state["authenticated"] = True
+                st.success("Successfully logged in!")
+            else:
+                st.error("Invalid username or password.")
 else:
-    # Translate content to English
+    st.write("Welcome, you are now logged in!")
+
     st.title(f"**Customer Churn Predictor** :runner::department_store:")
 
     st.write(
@@ -126,14 +118,9 @@ else:
             )
     )
 
-    #display img
-    st.image(
-        chun_img,
-        use_column_width=True,
-        caption= "Bees represent negative experiences that can drive customers away."
-    )
 
-    #st.header("Benefits of Using This App:")
+
+    
     st.markdown(
         """
         #### **Benefits of Using This App**
@@ -144,14 +131,7 @@ else:
         """
     )
 
-    st.markdown(
-        """
-        #### **The impact of customer churn**
-        💭 Studies show that losing a customer can cost 5-10 times more than acquiring a new one.
-
-        💭 Increasing customer retention by just 5% can boost profits by 25-95%.
-        """
-    )
+    
 
     # Call-to-action
     st.write("## Try it out❗") 
@@ -167,17 +147,17 @@ else:
     # Instructions
     st.write(
         """
-        Head over to the [*Predict page* ](http://localhost:8501/Predict) to easily input customer information and discover their churn risk.
+        Head over to the [*DEMO* ](http://localhost:8501/Predict) to discover customer churn risk.
 
-        For further details on the app's functionality and performance, explore the **Welcome** page. 
+        For further details on the app's functionality and performance, explore the source code. 
         """
     )
 
 # Link 
-st.write(
-    """
-**Source Code:** [GitHub Repository](https://github.com/Code-str8/Churn-Prediction-ML-app)
-
-**Gmail:** [ndunda.alex@gmail.com]
-"""
-)
+    st.write(
+       """
+    **Source Code:** [GitHub Repository](https://github.com/Code-str8/Churn-Prediction-ML-app)
+      # Contact Me 📧
+    **Gmail:** [ndunda.alex@gmail.com]
+       """
+    )

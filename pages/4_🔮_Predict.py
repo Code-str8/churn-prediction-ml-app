@@ -138,6 +138,7 @@ def make_prediction(pipeline, data):
         except Exception as e:  # handling errors
             st.error(f"An error occurred making the prediction: {e}")
 
+        
 
 
 # Main function

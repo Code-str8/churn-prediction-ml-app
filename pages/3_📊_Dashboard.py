@@ -129,33 +129,24 @@ def create_kpis_dashboard(data):
     fig, axes = plt.subplots(1, 2, figsize=(12, 6))
     sns.countplot(x='Contract', hue='InternetService', data=data, palette={'Fiber optic':'orange','DSL':'blue','No':'red'}, ax=axes[0])
     axes[0].set_title('Internet Service by Contract Term')
-    sns.countplot(x='Contract', hue='PhoneService', data=data, palette={'Yes':'orange', 'No':'blue'}, ax=axes[1])
+    sns.countplot(x='Contract', hue='PhoneService', data=data, palette={True:'orange', False:'blue'}, ax=axes[1])
     axes[1].set_title('Phone Service by Contract Term')
     st.pyplot(fig)
    
-    
+def create_kpis(data):
+    total_customers = len(data)
+    churn_customers = data[data['Churn'] == True].shape[0]
+    non_churn_customers = data[data['Churn'] == False].shape[0]
+    churn_rate = round((churn_customers / total_customers) * 100, 2)
 
-    # Histogram with Plotly
-    fig_payment = px.histogram(data, x='PaymentMethod', color='Churn', barmode='stack', color_discrete_map={True:'orange', False:'blue'}, labels={'PaymentMethod': 'Payment Method', 'Churn': 'Churn'}, title='Churn Patterns by Payment Method')
-    fig_payment.update_layout(xaxis_title='Payment Method', yaxis_title='Count', showlegend=True)
-    st.plotly_chart(fig_payment)
+    col1, col2, col3, col4 = st.columns(4)
+    col1.metric("Total Customers", total_customers)
+    col2.metric("Churn Customers", churn_customers)
+    col3.metric("Non-Churn Customers", non_churn_customers)
+    col4.metric("Churn Rate (%)", str(churn_rate) + "%")
     
     
-    
-    # Mean churn rates for senior citizens and non-senior citizens
-    senior_churn_rate = (data[data['SeniorCitizen'] == 1]['Churn'] == 'Yes').mean()  # Convert 'Yes' to 1, 'No' to 0
-    non_senior_churn_rate = (data[data['SeniorCitizen'] == 0]['Churn'] == 'Yes').mean()  # Convert 'Yes' to 1, 'No' to 0
-
-    # Plot pie chart
-    labels = ['Senior Citizen', 'Non-Senior Citizen']
-    sizes = [senior_churn_rate, non_senior_churn_rate]
-    colors = ['blue', 'orange']
-    fig_pie, ax_pie = plt.subplots(figsize=(8, 8))
-    ax_pie.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%', startangle=90)
-    ax_pie.set_title('Churn Rates by Senior Citizen Status')
-    st.pyplot(fig_pie)
-    
-
+   
 
 # Dashboard selection
 st.sidebar.header("Select Dashboard Type:")
@@ -164,6 +155,7 @@ dashboard_type = st.sidebar.selectbox("", ["EDA", "KPIs"])
 if dashboard_type == "EDA":
     create_eda_dashboard(data)
 elif dashboard_type == "KPIs":
+    create_kpis(data)
     create_kpis_dashboard(data)
 else:
     st.error("Invalid dashboard type.")
