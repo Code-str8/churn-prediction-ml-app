@@ -19,6 +19,7 @@ username = st.secrets["Login"]
 password = st.secrets["password"]
 
  
+
 def LP2_Telco_churn():
     connection_string = f"DRIVER={{SQL Server}};SERVER={server};DATABASE={database};UID={username};PWD={password}"
     connection = pyodbc.connect(connection_string)
