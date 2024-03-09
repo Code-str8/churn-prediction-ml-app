@@ -145,7 +145,7 @@ def dashboard_page():
         else:
           st.error("Invalid dashboard type.")
     else:
-     st.error("Please log in to access the App.")
+     st.error("Please log in to access the App. Username: admin Password: Admin01")
 
 if __name__ == "__main__":
     dashboard_page()

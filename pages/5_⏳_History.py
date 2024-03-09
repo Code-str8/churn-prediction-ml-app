@@ -33,7 +33,7 @@ def history_page():
                else:
                   st.write("Unable to display history data due to errors.")
     else:
-     st.error("Please log in to access the App.")
+     st.error("Please log in to access the App. Username: admin Password: Admin01")
 
 if __name__ == "__main__":
     history_page()
