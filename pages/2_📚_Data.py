@@ -14,7 +14,10 @@ st.set_page_config(
 def data_page():
     login_form()
     if is_authenticated():
+Predict-page
+
         
+ main
         data = pd.DataFrame(pd.read_excel("Dataset\Lp2_df_coc.xlsx"))
 
         st.title("Explore Customer Data ⭐")
