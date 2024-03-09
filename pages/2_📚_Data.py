@@ -14,21 +14,8 @@ st.set_page_config(
 def data_page():
     login_form()
     if is_authenticated():
-        
-        database = st.secrets["database_name"]
-        server = st.secrets["server_name"]
-        username = st.secrets["Login"]
-        password = st.secrets["password"]
 
-        def fetch_data():
-            connection_string = f"DRIVER={{SQL Server}};SERVER={server};DATABASE={database};UID={username};PWD={password}"
-            connection = pyodbc.connect(connection_string)
-            query = 'SELECT * FROM dbo.LP2_Telco_churn_first_3000'
-            data = pd.read_sql(query, connection)
-            connection.close()
-            return data
-
-        data = fetch_data()
+        data = pd.DataFrame(pd.read_excel("Lp2_df_coc.xlsx"))
 
         st.title("Explore Customer Data ⭐")
         st.write(
