@@ -10,7 +10,7 @@ from imblearn.over_sampling import RandomOverSampler
 from sklearn.linear_model import LogisticRegression
 from  PIL import Image
 from auth import login_form, is_authenticated
-from utili import log1p_transform
+from util import log1p_transform
 
 import streamlit as st
 import pandas as pd

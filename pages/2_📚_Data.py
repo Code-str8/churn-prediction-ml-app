@@ -116,7 +116,7 @@ def data_page():
         st.image(gif_path)
 
     else:
-        st.error("Please log in to access the App.")
+        st.error("Please log in to access the App. Username: admin Password: Admin01")
 
 if __name__ == "__main__":
     data_page()
