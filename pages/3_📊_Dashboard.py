@@ -22,7 +22,7 @@ def dashboard_page():
          """
         )
 
-        data = pd.DataFrame(pd.read_excel("Lp2_df_coc.xlsx"))
+        data = pd.DataFrame(pd.read_excel("Dataset\Lp2_df_coc.xlsx"))
 
         # EDA Dashboard
         def create_eda_dashboard(data):
@@ -114,20 +114,20 @@ def dashboard_page():
             fig, axes = plt.subplots(1, 2, figsize=(12, 6))
             sns.countplot(x='Contract', hue='InternetService', data=data, palette={'Fiber optic':'orange','DSL':'blue','No':'red'}, ax=axes[0])
             axes[0].set_title('Internet Service by Contract Term')
-            sns.countplot(x='Contract', hue='PhoneService', data=data, palette={True:'orange', False:'blue'}, ax=axes[1])
+            sns.countplot(x='Contract', hue='PhoneService', data=data, palette={"Yes":'orange', "No":'blue'}, ax=axes[1])
             axes[1].set_title('Phone Service by Contract Term')
             st.pyplot(fig)
    
         def create_kpis(data):
             total_customers = len(data)
-            churn_customers = data[data['Churn'] == True].shape[0]
-            non_churn_customers = data[data['Churn'] == False].shape[0]
-            churn_rate = round((churn_customers / total_customers) * 100, 2)
+            senior_customers = data[data['SeniorCitizen'] == 1].shape[0]
+            non_senior_customers = data[data['SeniorCitizen'] == 0].shape[0]
+            churn_rate = round((senior_customers / total_customers) * 100, 2)
 
             col1, col2, col3, col4 = st.columns(4)
-            col1.metric("Total Customers", total_customers)
-            col2.metric("Churn Customers", churn_customers)
-            col3.metric("Non-Churn Customers", non_churn_customers)
+            col1.metric("Total Customers📊", total_customers )
+            col2.metric("Churn Customers📉", senior_customers)
+            col3.metric("Non-Churn Customers📈", non_senior_customers)
             col4.metric("Churn Rate (%)", str(churn_rate) + "%")
     
     
