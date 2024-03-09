@@ -15,7 +15,7 @@ def data_page():
     login_form()
     if is_authenticated():
         #pd.read_excel("Lp2_df_coc.xlsx")
-        data = pd.DataFrame(pd.read_excel("Lp2_df_coc.xlsx"))
+        data = pd.DataFrame(pd.read_excel("Dataset\Lp2_df_coc.xlsx"))
 
         st.title("Explore Customer Data ⭐")
         st.write(

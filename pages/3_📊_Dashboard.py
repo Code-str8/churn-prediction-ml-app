@@ -22,7 +22,7 @@ def dashboard_page():
          """
         )
 
-        data = pd.DataFrame(pd.read_excel("Lp2_df_coc.xlsx"))
+        data = pd.DataFrame(pd.read_excel("Dataset\Lp2_df_coc.xlsx"))
 
         # EDA Dashboard
         def create_eda_dashboard(data):
