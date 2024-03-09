@@ -22,24 +22,7 @@ def dashboard_page():
          """
         )
 
-        database = st.secrets["database_name"]
-        server = st.secrets["server_name"]
-        username = st.secrets["Login"]
-        password = st.secrets["password"]
-
- 
-
-        def LP2_Telco_churn():
-           connection_string = f"DRIVER={{SQL Server}};SERVER={server};DATABASE={database};UID={username};PWD={password}"
-           connection = pyodbc.connect(connection_string)
-           #query
-           query = 'SELECT * FROM dbo.LP2_Telco_churn_first_3000'
-           data = pd.read_sql(query, connection)
-           connection.close()
-
-           return data
-
-        data = LP2_Telco_churn()
+        data = pd.DataFrame(pd.read_excel("Lp2_df_coc.xlsx"))
 
         # EDA Dashboard
         def create_eda_dashboard(data):
