@@ -17,7 +17,7 @@ def data_page():
 
 
     
-        data = pd.read_excel("C:\Users\ndund\OneDrive\Documents\PYTHON\Churn-Prediction-ML-app\Dataset\Lp2_df_coc.xlsx")
+        data = pd.read_excel("Dataset\Lp2_df_coc.xlsx")
 
         st.title("Explore Customer Data ⭐")
         st.write(
