@@ -1,6 +1,6 @@
 absl-py==2.1.0        
 aiofiles==23.2.1      
-altair
+altair==4.1.0
 annotated-types==0.6.0
 anyio==4.2.0
 astunparse==1.6.3     
