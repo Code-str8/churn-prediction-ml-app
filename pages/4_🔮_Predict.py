@@ -149,20 +149,7 @@ def select_model(gender, Partner, Dependents, tenure, PhoneService, MultipleLine
         st.error(f"An error occurred loading the model: {e}")
     return pipeline, encoder
 
-database = st.secrets["database_name"]
-server = st.secrets["server_name"]
-username = st.secrets["Login"]
-password = st.secrets["password"]
-# Function to fetch data from the database
-def LP2_Telco_churn():
-    connection_string = f"DRIVER={{SQL Server}};SERVER={server};DATABASE={database};UID={username};PWD={password}"
-    connection = pyodbc.connect(connection_string)
-    #query
-    query = 'SELECT * FROM dbo.LP2_Telco_churn_first_3000'
-    data = pd.read_sql(query, connection)
-    connection.close()
-
-    return data
+data = pd.DataFrame(pd.read_excel("Dataset/Lp2_df_coc.xlsx"))
 
 # Function to make prediction using the selected model
 def make_prediction(pipeline, data):
