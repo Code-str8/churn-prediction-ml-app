@@ -149,7 +149,7 @@ def select_model(gender, Partner, Dependents, tenure, PhoneService, MultipleLine
         st.error(f"An error occurred loading the model: {e}")
     return pipeline, encoder
 
-data = pd.DataFrame(pd.read_excel("Dataset\Lp2_df_coc.xlsx"))
+data = pd.DataFrame(pd.read_excel("Dataset/Lp2_df_coc.xlsx"))
 
 # Function to make prediction using the selected model
 def make_prediction(pipeline, data):
