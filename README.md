@@ -59,6 +59,13 @@ Features
 3. **Data Setup**: Ensure you have a CSV dataset named `Lp2_df_coc.xlsx` placed inside a folder named `dataset` in the project directory.
  
 ### 💻 Running the App <a name="running-the-app"></a>
+
+### Prerequisites
+
+In order to run this project you need:
+
+- Python
+- Streamlit
  
 To run the app locally, execute the following command in the project directory:
  
@@ -69,7 +76,35 @@ streamlit run 1_Welcome.py
 The app will start running locally and can be accessed through a web browser.
  
 ### Usage <a name="usage"></a>
- 
+### Tech Stack  
+<details>
+  <summary>GUI</summary>
+  <ul>
+    <li><a href="">Streamlit</a></li>
+  </ul>
+</details>
+
+<details>
+<summary>Database</summary>
+  <ul>
+    <li><a href="">Microsoft SQL Server</a></li>
+  </ul>
+</details>
+
+<details>
+<summary>Language</summary>
+  <ul>
+    <li><a href="">Python</a></li>
+  </ul>
+</details>
+
+<details>
+<summary>Model</summary>
+  <ul>
+    <li><a href="">Sklearn</a></li>
+  </ul>
+</details>
+
 #### Welcome Page <a name="welcome-page"></a>
 - Provides an overview of the app and its purpose.
  
@@ -127,6 +162,14 @@ The app will start running locally and can be accessed through a web browser.
 - Model Tuning
 - Model Expansion
 - Model Monitoring
+
+## 👥 Authors
+
+🕵🏽‍♀️ **Alexander Ndunda**
+
+- GitHub: [GitHub Profile](https://github.com/Code-str8)
+- Medium: [Medium Handle](https://medium.com/@Codestr8)
+- LinkedIn: [LinkedIn Profile](https://linkedin.com/in/alexandernyambongo)
  
 ### 💡Contributing <a name="contributing"></a>
  
