@@ -15,14 +15,14 @@ def data_page():
     login_form()
     if is_authenticated():
 
-<<<<<<< HEAD
+
         
         data = pd.DataFrame(pd.read_excel("Dataset\Lp2_df_coc.xlsx"))
-=======
+
 
     
         data = pd.DataFrame(pd.read_excel('Dataset/Lp2_df_coc.xlsx'))
->>>>>>> 0bfe90744479ae800c23c3e2f4456caf978498ce
+
 
         st.title("Explore Customer Data ⭐")
         st.write(
