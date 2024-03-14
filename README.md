@@ -167,8 +167,8 @@ The app will start running locally and can be accessed through a web browser.
  
 ### 🎉Deployment <a name="deployment"></a>
  
-- Model Serialization
-- Model Loading
+- Streamlit: [Streamlit app](https://churn-prediction-ml-appgi-cacbbyzjm6uzakkyu2xgdk.streamlit.app/History)
+- Render: [Render app](https://churn-predictor-app.onrender.com)
  
 ### Further Development <a name="further-development"></a>
  
@@ -183,8 +183,7 @@ The app will start running locally and can be accessed through a web browser.
 - GitHub: [GitHub Profile](https://github.com/Code-str8)
 - Medium: [Medium Handle](https://medium.com/@Codestr8)
 - LinkedIn: [LinkedIn Profile](https://linkedin.com/in/alexandernyambongo)
-- Streamlit: [Streamlit app](https://churn-prediction-ml-appgi-cacbbyzjm6uzakkyu2xgdk.streamlit.app/History)
-- Render: [Render app](https://churn-predictor-app.onrender.com)
+
  
 ### 💡Contributing <a name="contributing"></a>
  
