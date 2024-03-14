@@ -107,10 +107,15 @@ The app will start running locally and can be accessed through a web browser.
 
 #### Welcome Page <a name="welcome-page"></a>
 - Provides an overview of the app and its purpose.
+
+ ![Image](https://github.com/Code-str8/churn-prediction-ml-app/blob/main/assets/images/churn%20app%20ss%201.PNG)
+
  
 #### Login Page <a name="login-page"></a>
 - New Users: Enter username and password to log in.
 - Credential: Username=admin and password=Admin01.
+
+  
  
 #### 📚 Data Page <a name="data-page"></a>
 - Displays basic information about the dataset.
@@ -118,19 +123,27 @@ The app will start running locally and can be accessed through a web browser.
 - Provides the first few rows of the dataset.
 - Conducts univariate and bivariate analysis.
 - Presents additional analysis using pandas styling.
+
+  ![Image](https://github.com/Code-str8/churn-prediction-ml-app/blob/main/assets/images/churn%20app%20ss%202.PNG)
  
 #### 🔮 Predict Page <a name="predictor-page"></a>
 - Online Prediction: Input customer details interactively to predict churn.
+
+   ![Image](https://github.com/Code-str8/churn-prediction-ml-app/blob/main/assets/images/churn%20app%20ss%204.PNG)
  
 #### 📊 Dashboard Page <a name="dashboard-page"></a>
 - Provides visualizations and analytics related to customer churn.
 - Includes research questions and key performance indicators.
 - Offers insights through various charts and plots.
+
+  ![Image](https://github.com/Code-str8/churn-prediction-ml-app/blob/main/assets/images/churn%20app%20ss%203.PNG)
  
 #### ⏳ History Page <a name="history-page"></a>
 - Tracks user interactions with the app.
 - Displays a history log of actions performed by the user.
 - Allows navigating back to previous points in history.
+
+  ![Image](https://github.com/Code-str8/churn-prediction-ml-app/blob/main/assets/images/churn%20app%20ss%205.PNG)
  
 ### Models Used <a name="models-used"></a>
  
